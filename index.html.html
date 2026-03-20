@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de Personalidad: ¿Qué Superhéroe Eres?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --spiderman: #E23636;
+    --superman: #0033CC;
+    --batman: #1a1a2e;
+    --aquaman: #00B4D8;
+    --gold: #FFD700;
+    --bg: #0d0d1a;
+    --card: #16213e;
+    --text: #f0f0f0;
+    --accent: #FFD700;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Comic Neue', cursive;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Comic dot pattern background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,215,0,0.08) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .hero-header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    position: relative;
+  }
+
+  .hero-header h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    color: var(--gold);
+    text-shadow:
+      4px 4px 0 #000,
+      -2px -2px 0 #000,
+      2px -2px 0 #000,
+      -2px 2px 0 #000,
+      0 6px 20px rgba(255,215,0,0.4);
+    animation: titlePop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  @keyframes titlePop {
+    from { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    to { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .hero-header p {
+    font-size: 1.1rem;
+    color: #aaa;
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+
+  .heroes-row {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .hero-badge {
+    font-family: 'Bangers', cursive;
+    font-size: 0.9rem;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2px solid;
+    letter-spacing: 2px;
+  }
+  .hero-badge.spider { color: var(--spiderman); border-color: var(--spiderman); }
+  .hero-badge.super  { color: #6ec6ff; border-color: #6ec6ff; }
+  .hero-badge.bat    { color: #c0c0c0; border-color: #c0c0c0; }
+  .hero-badge.aqua   { color: var(--aquaman); border-color: var(--aquaman); }
+
+  /* PROGRESS BAR */
+  .progress-container {
+    background: #0d0d1a;
+    border: 2px solid #333;
+    border-radius: 12px;
+    height: 14px;
+    margin: 20px 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--spiderman), var(--gold));
+    border-radius: 12px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  .progress-text {
+    text-align: center;
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    color: #888;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--card);
+    border: 3px solid var(--gold);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 20px 0;
+    box-shadow:
+      6px 6px 0 rgba(255,215,0,0.3),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+    animation: slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .question-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,215,0,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(60px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  @keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-60px); opacity: 0; }
+  }
+
+  .question-number {
+    font-family: 'Bangers', cursive;
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .question-text {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(1.4rem, 4vw, 1.9rem);
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1.2;
+    margin-bottom: 28px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  }
+
+  /* OPTIONS GRID */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    background: rgba(255,255,255,0.04);
+    border: 2px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    color: var(--text);
+    font-family: 'Comic Neue', cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .option-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.2s;
+    background: linear-gradient(135deg, rgba(255,215,0,0.1), transparent);
+  }
+
+  .option-btn:hover::before { opacity: 1; }
+  .option-btn:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 20px rgba(255,215,0,0.2);
+  }
+
+  .option-btn.selected {
+    border-color: var(--gold);
+    background: rgba(255,215,0,0.15);
+    transform: scale(0.98);
+  }
+
+  .option-letter {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: var(--gold);
+    min-width: 28px;
+  }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+  }
+
+  .btn {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .btn-next {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 4px 4px 0 #a07800;
+  }
+  .btn-next:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #a07800;
+  }
+  .btn-next:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #a07800;
+  }
+  .btn-next:disabled {
+    background: #444;
+    color: #888;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .btn-back {
+    background: transparent;
+    color: #888;
+    border: 2px solid #444;
+    box-shadow: 3px 3px 0 #222;
+  }
+  .btn-back:hover { color: #fff; border-color: #888; }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    display: none;
+    text-align: center;
+    padding: 30px 20px;
+    animation: fadeUp 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  }
+
+  @keyframes fadeUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .result-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    color: #aaa;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+  }
+
+  .result-hero-name {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    line-height: 1;
+    letter-spacing: 3px;
+    margin: 10px 0;
+  }
+
+  .result-emoji {
+    font-size: clamp(5rem, 18vw, 9rem);
+    display: block;
+    margin: 20px auto;
+    animation: heroFloat 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+  }
+
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-15px) rotate(2deg); }
+  }
+
+  .result-desc {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 30px;
+    color: #ccc;
+  }
+
+  /* SCORES TABLE */
+  .scores-table {
+    background: var(--card);
+    border-radius: 16px;
+    border: 2px solid #333;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .scores-table-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    padding: 14px;
+    background: rgba(255,215,0,0.08);
+    border-bottom: 2px solid #333;
+    color: var(--gold);
+  }
+
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .score-row:last-child { border-bottom: none; }
+
+  .score-row-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    min-width: 100px;
+  }
+
+  .score-bar-bg {
+    flex: 1;
+    height: 12px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-pts {
+    font-family: 'Bangers', cursive;
+    font-size: 1rem;
+    min-width: 36px;
+    text-align: right;
+    color: #aaa;
+  }
+
+  .btn-restart {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    padding: 14px 36px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    background: var(--gold);
+    color: #000;
+    box-shadow: 5px 5px 0 #a07800;
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+  .btn-restart:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 #a07800;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="hero-header">
+    <h1>¿Qué Superhéroe Eres?</h1>
+    <p>Responde las preguntas y descúbrelo</p>
+    <div class="heroes-row">
+      <span class="hero-badge spider">🕷 Spider-Man</span>
+      <span class="hero-badge super">⚡ Superman</span>
+      <span class="hero-badge bat">🦇 Batman</span>
+      <span class="hero-badge aqua">🔱 Aquaman</span>
+    </div>
+  </div>
+
+  <!-- QUIZ SECTION -->
+  <div id="quiz-section">
+    <div class="progress-text" id="progress-text">PREGUNTA 1 DE 8</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="question-card" id="question-card">
+      <div class="question-number" id="q-number">PREGUNTA 1</div>
+      <div class="question-text" id="q-text"></div>
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" id="btn-back" onclick="prevQuestion()">← ATRÁS</button>
+      <button class="btn btn-next" id="btn-next" onclick="nextQuestion()" disabled>SIGUIENTE →</button>
+    </div>
+  </div>
+
+  <!-- RESULT SECTION -->
+  <div class="result-screen" id="result-screen">
+    <div class="result-title">¡TU SUPERHÉROE ES...</div>
+    <div class="result-hero-name" id="result-name"></div>
+    <span class="result-emoji" id="result-emoji"></span>
+    <p class="result-desc" id="result-desc"></p>
+
+    <div class="scores-table">
+      <div class="scores-table-title">📊 TU TABLA DE RESULTADOS</div>
+      <div id="scores-rows"></div>
+    </div>
+
+    <button class="btn-restart" onclick="restartQuiz()">🔄 VOLVER A JUGAR</button>
+  </div>
+
+</div>
+
+<script>
+// Scoring keys: A=Spiderman, B=Batman, C=Superman, D=Aquaman
+const questions = [
+  {
+    text: "¿A quién prefieres?",
+    options: [
+      { letter: "A", text: "Spider-Man", hero: "A" },
+      { letter: "B", text: "Batman", hero: "B" },
+      { letter: "C", text: "Superman", hero: "C" },
+      { letter: "D", text: "Aquaman", hero: "D" }
+    ]
+  },
+  {
+    text: "¿Prefieres playa o bosque?",
+    options: [
+      { letter: "A", text: "🏖️ Playa (sol y olas)", hero: "D" },
+      { letter: "B", text: "🌲 Bosque (aventura)", hero: "B" },
+      { letter: "C", text: "🌅 Playa al atardecer", hero: "C" },
+      { letter: "D", text: "🌊 Mar abierto", hero: "A" }
+    ]
+  },
+  {
+    text: "¿Qué canción prefieres?",
+    options: [
+      { letter: "A", text: "Suerte", hero: "C" },
+      { letter: "B", text: "Vacile", hero: "B" },
+      { letter: "C", text: "444", hero: "A" },
+      { letter: "D", text: "111", hero: "D" }
+    ]
+  },
+  {
+    text: "¿Mar o alberca?",
+    options: [
+      { letter: "A", text: "🌊 Mar (libre y salvaje)", hero: "D" },
+      { letter: "B", text: "🏊 Alberca (controlado)", hero: "B" },
+      { letter: "C", text: "🌊 Mar (aventura)", hero: "A" },
+      { letter: "D", text: "🏊 Alberca (relajante)", hero: "C" }
+    ]
+  },
+  {
+    text: "¿Qué cantante prefieres?",
+    options: [
+      { letter: "A", text: "Bad Bunny", hero: "A" },
+      { letter: "B", text: "Rels B", hero: "B" },
+      { letter: "C", text: "Yan Block", hero: "D" },
+      { letter: "D", text: "Juan de Dios Pantoja", hero: "C" }
+    ]
+  },
+  {
+    text: "¿Qué postre prefieres?",
+    options: [
+      { letter: "A", text: "🍫 Brownie", hero: "B" },
+      { letter: "B", text: "🍰 Cheesecake", hero: "A" },
+      { letter: "C", text: "🌸 Flan", hero: "C" },
+      { letter: "D", text: "🎂 Pastel", hero: "D" }
+    ]
+  },
+  {
+    text: "¿Qué materia prefieres?",
+    options: [
+      { letter: "A", text: "📐 Matemáticas", hero: "B" },
+      { letter: "B", text: "🔬 Ciencias", hero: "A" },
+      { letter: "C", text: "📖 Historia", hero: "C" },
+      { letter: "D", text: "🎨 Artes", hero: "D" }
+    ]
+  },
+  {
+    text: "¿Qué deporte prefieres?",
+    options: [
+      { letter: "A", text: "🏊 Natación", hero: "D" },
+      { letter: "B", text: "🏐 Voley", hero: "A" },
+      { letter: "C", text: "🏀 Basketball", hero: "C" },
+      { letter: "D", text: "⚽ Futbol", hero: "B" }
+    ]
+  },
+  {
+    text: "¿Qué color prefieres?",
+    options: [
+      { letter: "A", text: "💙 Azul", hero: "C" },
+      { letter: "B", text: "❤️ Rojo", hero: "A" },
+      { letter: "C", text: "🌸 Rosa", hero: "D" },
+      { letter: "D", text: "🖤 Negro", hero: "B" }
+    ]
+  },
+  {
+    text: "¿Qué prefieres?",
+    options: [
+      { letter: "A", text: "📺 Televisión", hero: "B" },
+      { letter: "B", text: "💃 Bailar", hero: "A" },
+      { letter: "C", text: "📱 Celular", hero: "C" },
+      { letter: "D", text: "🎮 Videojuegos", hero: "D" }
+    ]
+  }
+];
+
+const heroes = {
+  A: {
+    name: "SPIDER-MAN",
+    emoji: "🕷️",
+    color: "#E23636",
+    desc: "¡Eres Spider-Man! Eres creativo, inteligente y muy ágil. No te rinden las dificultades y siempre encuentras una solución ingeniosa. Con gran poder viene una gran responsabilidad... ¡y tú la cargas con estilo!",
+    barColor: "#E23636"
+  },
+  B: {
+    name: "BATMAN",
+    emoji: "🦇",
+    color: "#8888cc",
+    desc: "¡Eres Batman! Eres analítico, estratégico y muy inteligente. Prefieres trabajar en la sombra y resolver los problemas con la mente antes que con la fuerza. La oscuridad es tu aliada.",
+    barColor: "#8888cc"
+  },
+  C: {
+    name: "SUPERMAN",
+    emoji: "⚡",
+    color: "#6ec6ff",
+    desc: "¡Eres Superman! Eres optimista, leal y poderoso. Siempre ves el lado bueno de las cosas y defiendes a quienes más lo necesitan. Eres el héroe clásico con corazón de oro.",
+    barColor: "#6ec6ff"
+  },
+  D: {
+    name: "AQUAMAN",
+    emoji: "🔱",
+    color: "#00B4D8",
+    desc: "¡Eres Aquaman! Eres libre, apasionado y conectado con la naturaleza. Te adaptas a cualquier situación y tienes una fuerza interior impresionante. El agua es tu hogar.",
+    barColor: "#00B4D8"
+  }
+};
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let selectedIndex = null;
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('q-number').textContent = `PREGUNTA ${current + 1}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('progress-text').textContent = `PREGUNTA ${current + 1} DE ${questions.length}`;
+  document.getElementById('progress-bar').style.width = `${((current) / questions.length) * 100}%`;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = `<span class="option-letter">${opt.letter}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectOption(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('btn-next').disabled = answers[current] === null;
+  document.getElementById('btn-back').style.visibility = current === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').textContent = current === questions.length - 1 ? 'VER RESULTADO ✨' : 'SIGUIENTE →';
+}
+
+function selectOption(index) {
+  answers[current] = index;
+  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === index);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function nextQuestion() {
+  if (answers[current] === null) return;
+
+  const card = document.getElementById('question-card');
+  card.style.animation = 'slideOut 0.3s ease forwards';
+  setTimeout(() => {
+    if (current < questions.length - 1) {
+      current++;
+      card.style.animation = 'slideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both';
+      renderQuestion();
+    } else {
+      showResult();
+    }
+  }, 280);
+}
+
+function prevQuestion() {
+  if (current === 0) return;
+  const card = document.getElementById('question-card');
+  card.style.animation = 'none';
+  current--;
+  renderQuestion();
+}
+
+function showResult() {
+  // Count scores
+  const scores = { A: 0, B: 0, C: 0, D: 0 };
+  questions.forEach((q, i) => {
+    if (answers[i] !== null) {
+      const heroKey = q.options[answers[i]].hero;
+      scores[heroKey]++;
+    }
+  });
+
+  // Find winner
+  let winner = 'A';
+  Object.entries(scores).forEach(([k, v]) => {
+    if (v > scores[winner]) winner = k;
+  });
+
+  const hero = heroes[winner];
+
+  document.getElementById('quiz-section').style.display = 'none';
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+
+  document.getElementById('result-name').textContent = hero.name;
+  document.getElementById('result-name').style.color = hero.color;
+  document.getElementById('result-name').style.textShadow = `4px 4px 0 #000, 0 0 30px ${hero.color}`;
+  document.getElementById('result-emoji').textContent = hero.emoji;
+  document.getElementById('result-desc').textContent = hero.desc;
+
+  // Scores table
+  const container = document.getElementById('scores-rows');
+  container.innerHTML = '';
+  const maxScore = Math.max(...Object.values(scores));
+
+  Object.entries(heroes).forEach(([key, h]) => {
+    const row = document.createElement('div');
+    row.className = 'score-row';
+    const pct = maxScore > 0 ? (scores[key] / questions.length) * 100 : 0;
+    row.innerHTML = `
+      <span class="score-row-name" style="color:${h.color}">${h.emoji} ${h.name}</span>
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" style="background:${h.barColor};width:0%" data-pct="${pct}"></div>
+      </div>
+      <span class="score-pts">${scores[key]}/${questions.length}</span>
+    `;
+    container.appendChild(row);
+  });
+
+  // Animate bars
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.score-bar-fill').forEach(bar => {
+        bar.style.width = bar.dataset.pct + '%';
+      });
+    });
+  });
+
+  // Confetti burst (simple CSS version)
+  triggerConfetti(hero.color);
+}
+
+function triggerConfetti(color) {
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('div');
+    el.style.cssText = `
+      position:fixed; width:10px; height:10px; border-radius:2px;
+      background:${i % 2 === 0 ? color : '#FFD700'};
+      left:${Math.random() * 100}vw;
+      top:-10px;
+      z-index:999;
+      animation: confettiFall ${1.5 + Math.random()}s linear ${Math.random() * 0.5}s forwards;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+  }
+}
+
+const style = document.createElement('style');
+style.textContent = `
+@keyframes confettiFall {
+  to { transform: translateY(110vh) rotate(${Math.random()*720}deg); opacity:0; }
+}`;
+document.head.appendChild(style);
+
+function restartQuiz() {
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  renderQuestion();
+}
+
+// Init
+renderQuestion();
+</script>
+</body>
+</html>
